@@ -24,7 +24,7 @@ import org.openqa.selenium.firefox.FirefoxDriver
  * THE SOFTWARE.
  */
 
-baseUrl = 'http://localhost:8080/integration-test/'
+baseUrl = 'http://localhost:8080/integration-test-nl/'
 
 driver = {
     System.setProperty("webdriver.firefox.bin","C:\\tools\\firefoxPortable\\FirefoxPortable\\App\\Firefox\\firefox.exe")

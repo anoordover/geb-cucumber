@@ -1,5 +1,3 @@
-import org.openqa.selenium.firefox.FirefoxDriver
-
 /*
  * The MIT License (MIT)
  *
@@ -24,9 +22,35 @@ import org.openqa.selenium.firefox.FirefoxDriver
  * THE SOFTWARE.
  */
 
-baseUrl = 'http://localhost:8080/integration-test/'
+package io.jdev.geb.cucumber.core.nl
+import spock.lang.Specification
+import test.pages.foo.bar.ViewWidgetPagina
 
-driver = {
-    System.setProperty("webdriver.firefox.bin","C:\\tools\\firefoxPortable\\FirefoxPortable\\App\\Firefox\\firefox.exe")
-    new FirefoxDriver()
+class PageFinderNLSpec extends Specification {
+
+	PageFinderNL pageFinder
+
+	void setup() {
+		pageFinder = new PageFinderNL()
+		pageFinder.packageNames = ['test.pages']
+	}
+
+	void "page finder resolves pages correctly"() {
+		expect:
+			pageFinder.getPageClass("view widget pagina") == ViewWidgetPagina.class
+	}
+
+	void "page finder throws exception for non-existent page"() {
+		when:
+			pageFinder.getPageClass("not there pagina")
+		then:
+			thrown(IllegalArgumentException)
+	}
+
+	void "page finder throws exception for duplicated pages"() {
+		when:
+			pageFinder.getPageClass("duplicated pagina")
+		then:
+			thrown(IllegalArgumentException)
+	}
 }

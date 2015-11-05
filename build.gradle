@@ -24,12 +24,13 @@
 
 buildscript {
 	repositories {
-		mavenCentral()
-		maven { url 'http://repo.springsource.org/plugins-release' }
+        mavenLocal()
+		maven { url 'http://sldka.cak-bz.local:8080/nexus-webapp-1.8.0/content/groups/public' }
 	}
 	dependencies {
 		classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
 		classpath 'com.github.samueltbrown:gradle-cucumber-plugin:0.7'
+        classpath 'net.researchgate:gradle-release:2.0.2'
 	}
 }
 
@@ -37,29 +38,30 @@ allprojects {
 	apply plugin: 'java'
 	apply plugin: 'groovy'
 	apply plugin: 'propdeps'
-
+    apply plugin: 'net.researchgate.release'
 
 	group = 'io.jdev.geb'
-	version = '0.3'
+	version = '0.4'
 
 	ext {
-		groovyVersion = "1.8.6"
+		groovyVersion = "2.3.9"
 		if(!project.hasProperty('gebVersion')) {
-			gebVersion = '0.9.3'
+			gebVersion = '0.10.0'
 		}
-		seleniumVersion = "2.41.0"
-		spockVersion = "0.7-groovy-1.8"
-		cucumberJvmVersion = "1.1.8"
-        cucumberVariablesVersion = '0.5'
+		seleniumVersion = "2.45.0"
+		spockVersion = "1.0-groovy-2.3"
+		cucumberJvmVersion = "1.2.2"
+        cucumberVariablesVersion = '0.6-SNAPSHOT'
 
 		isSnapshot = version.endsWith("-SNAPSHOT")
 	}
 
     repositories {
-        mavenCentral()
+        mavenLocal()
+		maven { url 'http://sldka.cak-bz.local:8080/nexus-webapp-1.8.0/content/groups/public' }
         if(isSnapshot) {
             // allow reading snapshot deps
-            maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+            maven { url 'http://sldka.cak-bz.local:8080/nexus-webapp-1.8.0/content/groups/public' }
         }
     }
 
@@ -74,19 +76,19 @@ apply from: "$project.rootDir/gradle/ide.gradle"
 
 // just sign / publish this module
 apply plugin: 'maven'
-apply plugin: 'signing'
+//apply plugin: 'signing'
 apply from: "$project.rootDir/gradle/pom.gradle"
 
 
 dependencies {
-	provided "org.codehaus.groovy:groovy:$groovyVersion"
+	provided "org.codehaus.groovy:groovy:2.3.6"
 	provided "org.gebish:geb-core:$gebVersion"
 	provided "info.cukes:cucumber-core:$cucumberJvmVersion"
 	provided "info.cukes:cucumber-groovy:$cucumberJvmVersion"
     provided "org.seleniumhq.selenium:selenium-api:$seleniumVersion"
     provided "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
 	compile "io.jdev.cucumber:cucumber-variables:$cucumberVariablesVersion"
-
+    compile "org.spockframework:spock-core:$spockVersion"
 
 
 	testCompile("org.spockframework:spock-core:$spockVersion") {
@@ -111,10 +113,10 @@ allprojects {
     }
 }
 
-signing {
-	sign configurations.archives
-	required { !isSnapshot && gradle.taskGraph.hasTask(uploadArchives) }
-}
+//signing {
+//	sign configurations.archives
+//	required { !isSnapshot && gradle.taskGraph.hasTask(uploadArchives) }
+//}
 
 javadoc {
 	title = "Geb Cucumber API $version"
@@ -139,17 +141,17 @@ artifacts {
 uploadArchives { task ->
 	repositories.mavenDeployer {
 		if(!isSnapshot) {
-			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			//beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 		}
 		uniqueVersion = false
 		gradle.taskGraph.whenReady { taskGraph ->
 			if (taskGraph.hasTask(task)) {
-				repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-					authentication(userName: sonatypeOssUsername, password: sonatypeOssPassword)
-				}
-				snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-					authentication(userName: sonatypeOssUsername, password: sonatypeOssPassword)
-				}
+                repository(url: "http://sldka.cak-bz.local:8080/nexus-webapp-1.8.0/content/repositories/releases/") {
+                    authentication(userName: "deployment", password: "h0o4c2h5d8")
+                }
+                snapshotRepository(url: "http://sldka.cak-bz.local:8080/nexus-webapp-1.8.0/content/repositories/snapshots/") {
+                    authentication(userName: "deployment", password: "h0o4c2h5d8")
+                }
 			}
 		}
 	}

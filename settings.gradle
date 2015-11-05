@@ -23,4 +23,5 @@
  */
 
 rootProject.name = 'geb-cucumber'
+include 'integration-test-nl'
 include 'integration-test'

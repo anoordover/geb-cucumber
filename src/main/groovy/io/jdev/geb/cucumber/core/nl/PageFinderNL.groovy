@@ -1,5 +1,3 @@
-import org.openqa.selenium.firefox.FirefoxDriver
-
 /*
  * The MIT License (MIT)
  *
@@ -24,9 +22,49 @@ import org.openqa.selenium.firefox.FirefoxDriver
  * THE SOFTWARE.
  */
 
-baseUrl = 'http://localhost:8080/integration-test/'
+package io.jdev.geb.cucumber.core.nl
 
-driver = {
-    System.setProperty("webdriver.firefox.bin","C:\\tools\\firefoxPortable\\FirefoxPortable\\App\\Firefox\\firefox.exe")
-    new FirefoxDriver()
+import geb.Page
+import io.jdev.geb.cucumber.core.BasePageFinder
+import io.jdev.geb.cucumber.core.PageFinder
+import io.jdev.geb.cucumber.core.PageFinderSetup
+import io.jdev.geb.cucumber.core.util.NameUtil
+
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+class PageFinderNL extends BasePageFinder<Page> {
+
+	static final Pattern PAGE_NAME_PATTERN = Pattern.compile("(.*) (pagina|dialoog)")
+
+    private static PageFinder instance
+
+    public PageFinderNL() {
+        super(Page)
+    }
+
+    public static PageFinder getInstance() {
+        if(!instance) {
+            instance = new PageFinderNL(packageNames: PageFinderSetup.packageNames)
+        }
+        instance
+    }
+	
+    public static void setInstance(PageFinder pageFinder) {
+        instance = pageFinder
+    }
+
+	@Override
+	String pageNameToClassName(String pageName) {
+		if(!pageName) {
+			return null
+		}
+		pageName = pageName.toLowerCase()
+		Matcher m = PAGE_NAME_PATTERN.matcher(pageName)
+		if(!m.matches()) {
+			// this probably shouldn't happen
+			return null
+		}
+		return NameUtil.lowerCaseToProperCase(m.group(0))
+	}
 }

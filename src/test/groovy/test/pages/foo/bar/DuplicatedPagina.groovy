@@ -1,5 +1,3 @@
-import org.openqa.selenium.firefox.FirefoxDriver
-
 /*
  * The MIT License (MIT)
  *
@@ -24,9 +22,7 @@ import org.openqa.selenium.firefox.FirefoxDriver
  * THE SOFTWARE.
  */
 
-baseUrl = 'http://localhost:8080/integration-test/'
+package test.pages.foo.bar
 
-driver = {
-    System.setProperty("webdriver.firefox.bin","C:\\tools\\firefoxPortable\\FirefoxPortable\\App\\Firefox\\firefox.exe")
-    new FirefoxDriver()
+class DuplicatedPagina extends geb.Page {
 }

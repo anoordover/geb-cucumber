@@ -1,5 +1,3 @@
-import org.openqa.selenium.firefox.FirefoxDriver
-
 /*
  * The MIT License (MIT)
  *
@@ -24,9 +22,20 @@ import org.openqa.selenium.firefox.FirefoxDriver
  * THE SOFTWARE.
  */
 
-baseUrl = 'http://localhost:8080/integration-test/'
+package pages
 
-driver = {
-    System.setProperty("webdriver.firefox.bin","C:\\tools\\firefoxPortable\\FirefoxPortable\\App\\Firefox\\firefox.exe")
-    new FirefoxDriver()
+import geb.Page
+
+class HomePagina extends Page {
+    static at = { title == 'Test app home page' }
+    static url = ''
+    static content = {
+        greeting(required: false) { $('#greeting') }
+        greetingString(required: false) { $('#greeting')?.text() }
+        popupButton { $('#popupButton') }
+        alertButton { $('#alertButton') }
+        confirmButton { $('#confirmButton') }
+        promptButton { $('#promptButton') }
+        alertResult { $('#alertResult') }
+    }
 }

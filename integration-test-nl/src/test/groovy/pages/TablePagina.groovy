@@ -1,5 +1,3 @@
-import org.openqa.selenium.firefox.FirefoxDriver
-
 /*
  * The MIT License (MIT)
  *
@@ -24,9 +22,25 @@ import org.openqa.selenium.firefox.FirefoxDriver
  * THE SOFTWARE.
  */
 
-baseUrl = 'http://localhost:8080/integration-test/'
+package pages
 
-driver = {
-    System.setProperty("webdriver.firefox.bin","C:\\tools\\firefoxPortable\\FirefoxPortable\\App\\Firefox\\firefox.exe")
-    new FirefoxDriver()
+import geb.Module
+import geb.Page
+
+class TablePagina extends Page {
+    static url = 'table.jsp'
+    static at = { title == 'Table page' }
+    static content = {
+        users { $('tbody tr').collect { module TableRow, it} }
+    }
+}
+
+class TableRow extends Module {
+    static content = {
+        id           { $('td.id') }
+        name         { $('td.name') }
+        username     { $('td.username') }
+        emailAddress { $('td.email') }
+        dob          { $('td.dob') }
+    }
 }

@@ -58,8 +58,8 @@ check.dependsOn(cucumber)
 cucumber {
     formats = ['asyougo']
     glueDirs = [
-        'classpath:io.jdev.geb.cucumber.steps.groovy.en',
-        'classpath:io.jdev.cucumber.variables.groovy.en',
+        'classpath:io.jdev.geb.cucumber.steps.groovy.nl',
+        'classpath:io.jdev.cucumber.variables.groovy.nl',
         'classpath:teststeps'
     ]
     featureDirs = ["$project.projectDir/src/cucumber/features".toString()]
